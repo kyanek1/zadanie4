@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moja aplikacja PWA - Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    </head>
+<body>
+    <div id="loginPage">
+        <h1>Logowanie</h1>
+        <input type="text" id="username" placeholder="Nazwa użytkownika (admin)">
+        <input type="password" id="password" placeholder="Hasło (password)">
+        <button id="loginButton">Zaloguj</button>
+    </div>
+
+    <div id="dashboard" style="display:none;">
+        <header>
+            <h1>Dashboard</h1>
+            <button id="logoutButton">Wyloguj</button>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="#" id="linkStronaGlowna">Strona główna</a></li>
+                <li><a href="#" id="linkMojeKonto">Moje konto</a></li>
+                <li><a href="#" id="linkUstawienia">Ustawienia</a></li>
+            </ul>
+        </nav>
+        <main>
+            <p>Witaj użytkowniku! Jesteś na pulpicie nawigacyjnym.</p>
+            <div id="contentArea">
+                </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(function(registration) {
+                        console.log('Service Worker zarejestrowany poprawnie, zakres:', registration.scope);
+                    })
+                    .catch(function(error) {
+                        console.error('Błąd podczas rejestracji Service Workera:', error);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>

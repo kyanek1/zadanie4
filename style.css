@@ -1,0 +1,109 @@
+/* style.css */
+body {
+    font-family: Arial, sans-serif;
+    padding: 0; /* Usunięty padding dla lepszego dopasowania dashboardu */
+    margin: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+#loginPage {
+    text-align: center;
+    padding-top: 50px;
+}
+
+#loginPage input {
+    display: block;
+    margin: 10px auto;
+    padding: 10px;
+    width: 200px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+#loginPage button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#loginPage button:hover {
+    background-color: #0056b3;
+}
+
+#dashboard {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Zmienione na min-height dla elastyczności */
+}
+
+header {
+    background-color: #007bff;
+    color: white;
+    padding: 15px 20px; /* Zwiększony padding */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Dodany cień */
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.5em; /* Dostosowanie rozmiaru czcionki */
+}
+
+header button {
+    padding: 8px 15px; /* Dostosowanie paddingu przycisku */
+    background-color: #dc3545; /* Czerwony dla wylogowania */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+header button:hover {
+    background-color: #c82333;
+}
+
+nav {
+    background-color: #343a40; /* Ciemniejsze tło dla nav */
+    padding: 0; /* Usunięty padding, aby linki lepiej pasowały */
+    flex: 0 0 auto;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Dodany cień */
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0; /* Usunięty margines */
+    display: flex; /* Linki obok siebie */
+    justify-content: center; /* Wyśrodkowanie linków */
+}
+
+nav ul li {
+    margin-right: 0; /* Usunięty margines, padding będzie na <a> */
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #f8f9fa; /* Jaśniejszy kolor tekstu dla kontrastu */
+    padding: 15px 20px; /* Zwiększony padding dla lepszego klikania */
+    display: block; /* Aby padding działał poprawnie */
+    border-bottom: 3px solid transparent; /* Grubsza obwódka dla hover */
+}
+
+nav ul li a:hover,
+nav ul li a.active { /* Dodana klasa .active dla aktywnego linku */
+    background-color: #495057; /* Lekkie podświetlenie tła */
+    border-bottom: 3px solid #007bff;
+    color: white; /* Kolor tekstu na hover */
+}
+
+main {
+    padding: 20px;
+    flex-grow: 1; /* Aby main wypełniał dostępną przestrzeń */
+    background-color: #ffffff; /* Białe tło dla treści */
+}
