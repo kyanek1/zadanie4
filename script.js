@@ -18,17 +18,25 @@ document.addEventListener('DOMContentLoaded', () => {
         return localStorage.getItem('loggedInPWA') === 'true';
     };
 
+    const updateActiveLink = (activeLink) => {
+        document.querySelectorAll('nav ul li a').forEach(link => link.classList.remove('active'));
+        if (activeLink) {
+            activeLink.classList.add('active');
+        }
+    };
+
     const showLoginPage = () => {
         if (loginPage) loginPage.style.display = 'block';
         if (dashboard) dashboard.style.display = 'none';
     };
 
-    const showDashboard = () => {
+    const showDashboard = (initialContent = true) => {
         if (loginPage) loginPage.style.display = 'none';
         if (dashboard) dashboard.style.display = 'block';
-        // Po pokazaniu dashboardu, wyświetl domyślną treść "Strona główna"
-        if (contentArea) {
-            contentArea.innerHTML = '<p>Jesteś na stronie głównej dashboardu.</p>';
+        
+        if (initialContent && contentArea) { // Wyświetl domyślną treść tylko przy pierwszym załadowaniu dashboardu
+            contentArea.innerHTML = '<h2>Witaj na pulpicie!</h2><p>Jesteś na stronie głównej dashboardu. Wybierz opcję z menu, aby zobaczyć więcej.</p>';
+            updateActiveLink(linkStronaGlowna);
         }
     };
 
@@ -39,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (username === 'admin' && password === 'password') {
                 localStorage.setItem('loggedInPWA', 'true');
-                showDashboard();
+                showDashboard(true); // Pokaż dashboard z domyślną treścią
             } else {
                 alert('Nieprawidłowa nazwa użytkownika lub hasło.');
             }
@@ -59,31 +67,25 @@ document.addEventListener('DOMContentLoaded', () => {
     // Obsługa kliknięć w nawigacji
     if (linkStronaGlowna && contentArea) {
         linkStronaGlowna.addEventListener('click', (event) => {
-            event.preventDefault(); // Zapobiegaj domyślnej akcji linku (#)
-            contentArea.innerHTML = '<p>Jesteś na stronie głównej dashboardu.</p>';
-            // Opcjonalnie: usuń klasę 'active' z innych linków i dodaj do tego
-            document.querySelectorAll('nav ul li a').forEach(link => link.classList.remove('active'));
-            linkStronaGlowna.classList.add('active');
+            event.preventDefault();
+            contentArea.innerHTML = '<h2>Witaj na pulpicie!</h2><p>Jesteś na stronie głównej dashboardu. Wybierz opcję z menu, aby zobaczyć więcej.</p>';
+            updateActiveLink(linkStronaGlowna);
         });
     }
 
-    if (linkMojeKonto) {
+    if (linkMojeKonto && contentArea) {
         linkMojeKonto.addEventListener('click', (event) => {
             event.preventDefault();
-            alert('Funkcja "Moje konto" nie jest jeszcze gotowa.');
-            // Opcjonalnie: zarządzanie klasą 'active'
-            document.querySelectorAll('nav ul li a').forEach(link => link.classList.remove('active'));
-            linkMojeKonto.classList.add('active');
+            contentArea.innerHTML = '<h2>Moje Konto</h2><p>Tutaj w przyszłości pojawi się formularz i dane zapisane w IndexedDB.</p><p>Na razie to tylko przykładowa treść dla tej sekcji.</p>';
+            updateActiveLink(linkMojeKonto);
         });
     }
 
-    if (linkUstawienia) {
+    if (linkUstawienia && contentArea) {
         linkUstawienia.addEventListener('click', (event) => {
             event.preventDefault();
-            alert('Funkcja "Ustawienia" nie jest jeszcze gotowa.');
-            // Opcjonalnie: zarządzanie klasą 'active'
-            document.querySelectorAll('nav ul li a').forEach(link => link.classList.remove('active'));
-            linkUstawienia.classList.add('active');
+            contentArea.innerHTML = '<h2>Ustawienia</h2><p>W tym miejscu będziesz mógł zarządzać ustawieniami aplikacji.</p><p>Na przykład, wprowadzić klucz API lub wybrać preferencje.</p>';
+            updateActiveLink(linkUstawienia);
         });
     }
 
@@ -98,9 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Sprawdź stan zalogowania przy załadowaniu strony
     if (isLoggedIn()) {
-        showDashboard();
-        // Ustaw link "Strona główna" jako aktywny przy pierwszym załadowaniu dashboardu
-        if (linkStronaGlowna) linkStronaGlowna.classList.add('active');
+        showDashboard(true); // Pokaż dashboard z domyślną treścią "Strona główna"
     } else {
         showLoginPage();
     }
