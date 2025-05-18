@@ -1,18 +1,16 @@
 // sw.js
 
-// Zmieniona nazwa cache na nową wersję
-const CACHE_NAME = 'pwa-dashboard-cache-v3';
+// Zmieniona nazwa cache na nową wersję, jeśli wprowadzasz istotne zmiany w cachowanych plikach
+const CACHE_NAME = 'pwa-dashboard-cache-v4'; // Podbijamy wersję cache
 const urlsToCache = [
     './', // Alias dla index.html
     './index.html',
     './style.css',
     './script.js',
     './manifest.json',
-    './images/icon-192x192.png', // Upewnij się, że masz ten plik
-    './images/icon-512x512.png', // Upewnij się, że masz ten plik
-    // Jeśli używałeś pliku sample.png i jest on osobną ikoną, dodaj go tutaj, np.:
-    // './images/sample.png',
-    './offline.html' // Nasza strona offline
+    './images/sample.png', 
+    './images/sample.png',
+    './offline.html' 
 ];
 
 // Instalacja Service Workera i cachowanie zasobów
@@ -62,7 +60,7 @@ self.addEventListener('fetch', function(event) {
     if (event.request.method !== 'GET') {
         console.log('[SW] Pomijam żądanie nie-GET:', event.request.method, event.request.url);
         // Dla żądań nie-GET, po prostu pozwalamy im przejść do sieci bez modyfikacji
-        return;
+        return; // Ważne, aby zakończyć funkcję tutaj dla żądań nie-GET
     }
 
     event.respondWith(
@@ -78,15 +76,25 @@ self.addEventListener('fetch', function(event) {
                 console.log('[SW] Nie znaleziono w cache, pobieranie z sieci:', event.request.url);
                 return fetch(event.request)
                     .then(function(networkResponse) {
-                        // Opcjonalnie: dynamiczne cachowanie nowych zasobów
+                        // Opcjonalnie: Można tutaj dodać logikę dynamicznego cachowania
+                        // np. otworzyć cache i dodać networkResponse, jeśli chcemy
+                        // cachować nowe zasoby "w locie".
+                        // const cache = await caches.open(CACHE_NAME);
+                        // cache.put(event.request, networkResponse.clone());
                         return networkResponse;
                     })
                     .catch(function() { // Błąd pobierania z sieci (np. brak połączenia)
                         console.log('[SW] Błąd pobierania z sieci, próba zwrócenia strony offline dla:', event.request.url);
                         // Zwróć stronę offline tylko dla żądań nawigacyjnych (gdy użytkownik próbuje otworzyć stronę HTML)
-                        if (event.request.mode === 'navigate') {
+                        // Sprawdzamy, czy żądanie oczekuje dokumentu HTML
+                        if (event.request.mode === 'navigate' ||
+                            (event.request.method === 'GET' &&
+                             event.request.headers.get('accept').includes('text/html'))) {
                             return caches.match('./offline.html');
                         }
+                        // Dla innych typów zasobów (CSS, JS, obrazy) nie zwracamy strony offline,
+                        // ponieważ to mogłoby zepsuć stronę, która częściowo się załadowała.
+                        // Przeglądarka sama obsłuży błąd dla tych zasobów.
                     });
             })
     );
